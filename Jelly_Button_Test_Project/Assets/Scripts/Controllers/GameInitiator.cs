@@ -25,6 +25,13 @@ public class GameInitiator : MonoBehaviour
     private void ConfigControllers()
     {
         controllers.Add(new PlayerController());
+        controllers.Add(new RoadController());
+    }
+
+    private void Update()
+    {
+        foreach (IController controller in controllers)
+            controller.Update();
     }
 
     private void OnDestroy()

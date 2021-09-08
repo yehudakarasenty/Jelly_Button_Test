@@ -3,4 +3,6 @@
     void Init();
 
     void Destroy();
+
+    void Update();
 }
