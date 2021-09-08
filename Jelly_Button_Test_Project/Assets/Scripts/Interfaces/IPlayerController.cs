@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public interface IPlayerController: IController
 {
@@ -9,4 +7,6 @@ public interface IPlayerController: IController
     void EndGame();
 
     void SetView(IPlayerView playerView);
+
+    Vector3 PlayerPosition { get; }
 }
