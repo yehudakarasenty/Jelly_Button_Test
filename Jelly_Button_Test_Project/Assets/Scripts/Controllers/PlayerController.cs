@@ -1,17 +1,20 @@
 ﻿using System;
 using UnityEngine;
 
-public class PlayerController : IPlayerController
+public class PlayerController : IPlayerController 
 {
-    private const float ROAD_WIDTH = 200;
+    private const float ROAD_WIDTH = 6;
     private const float MAXIMUM_MOVMENT_SPEED = 20;
     private const float MAXIMUM_ROTATION_AXIS = 45;
+    private const float PLAYER_SPPED = 20;
 
     #region Dependencis
     private IInputListener mInputListener;
     #endregion
 
     private IPlayerView mView;
+
+    public Vector3 PlayerPosition => mView.Position;
 
     public PlayerController()
     {
@@ -33,12 +36,17 @@ public class PlayerController : IPlayerController
         mInputListener.RegisterToHorizontalInput(OnHorizontalInputChange);
     }
 
+    public void Update()
+    {
+        mView.Position += new Vector3(0, 0, PLAYER_SPPED * Time.deltaTime);
+    }
+
     private void OnHorizontalInputChange(float axis)
     {
         Vector3 position = mView.Position;
         float step = MAXIMUM_MOVMENT_SPEED * axis * Time.deltaTime;
-        //TODO check if its in the road width
-        mView.Position = new Vector3(position.x + step, position.y, position.z);
+        if(Math.Abs(position.x + step)<ROAD_WIDTH/2)
+            mView.Position = new Vector3(position.x + step, position.y, position.z);
         Vector3 rotation = mView.Rotation.eulerAngles;
         rotation.z = MAXIMUM_ROTATION_AXIS * axis * -1;
         mView.Rotation = Quaternion.Euler(rotation);
@@ -53,4 +61,5 @@ public class PlayerController : IPlayerController
     {
         SingleManager.Remove<IPlayerController>();
     }
+
 }
