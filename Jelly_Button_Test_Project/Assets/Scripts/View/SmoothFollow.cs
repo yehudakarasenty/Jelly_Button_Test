@@ -1,12 +1,25 @@
 ﻿using UnityEngine;
 
-public class SmoothFollow : MonoBehaviour
+public class SmoothFollow : MonoBehaviour, ISmoothFollow
 {
-    public float distance = 10.0f;
-    public float height = 5.0f;
-    public float heightDamping = 2.0f;
-    public float rotationDamping = 3.0f;
-    public Transform target;
+    private ISmoothFollowController mController;
+
+    [SerializeField]
+    private float distance = 6f;
+    [SerializeField]
+    private float height = 1f;
+    [SerializeField]
+    private float heightDamping = 2f;
+    [SerializeField]
+    private float rotationDamping = 3f;
+    [SerializeField]
+    private Transform target;
+
+    private void Awake()
+    {
+        mController = SingleManager.Get<ISmoothFollowController>();
+        mController.SetView(this);
+    }
 
     private void LateUpdate()
     {
@@ -41,5 +54,15 @@ public class SmoothFollow : MonoBehaviour
 
         // Always look at the target
         transform.LookAt(target);
+    }
+
+    public void SetDistance(float distance)
+    {
+        this.distance = distance;
+    }
+
+    public void SetHeight(float height)
+    {
+        this.height = height;
     }
 }

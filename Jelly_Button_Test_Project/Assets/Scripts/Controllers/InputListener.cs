@@ -35,6 +35,8 @@ public class InputListener : MonoBehaviour, IInputListener
         OnHorizontalChange.RemoveListener(action);
     }
 
+    public bool IsKeyIsDown(KeyCode keyCode) => Input.GetKey(keyCode);
+
     private void OnDestroy()
     {
         SingleManager.Remove<IInputListener>();

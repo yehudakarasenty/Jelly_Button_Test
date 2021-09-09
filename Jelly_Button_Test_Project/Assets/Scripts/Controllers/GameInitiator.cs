@@ -29,6 +29,7 @@ public class GameInitiator : MonoBehaviour
         controllers.Add(new PlayerController());
         controllers.Add(new RoadController());
         controllers.Add(new ObstaclesController());
+        controllers.Add(new SmoothFollowContoller());
     }
 
     private void Update()
