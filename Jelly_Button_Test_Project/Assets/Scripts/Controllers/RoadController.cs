@@ -1,21 +1,28 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class RoadController : IRoadController
 {
+    private const float ROAD_LENGTH = 200;
+    private const float ROAD_WIDTH = 6;
+
     #region Dependencies
     private IPlayerController mPlayerController;
     #endregion
-
-    private const float ROAD_LENGTH = 200;
 
     private IRoadView mView;
 
     private Queue<Vector3> planesPositions = new Queue<Vector3>();
 
-    private Vector3 lastPlane;
+    private Vector3 lastCreatedPlane;
+
+    private bool NeedToBuild { get => lastCreatedPlane.z - mPlayerController.PlayerPosition.z < ROAD_LENGTH; }
+
+    private bool NeedToDestroy { get => planesPositions.Count != 0 && mPlayerController.PlayerPosition.z - planesPositions.Peek().z > mView.PlaneSize; }
+
+    public float RoadLength => ROAD_LENGTH;
+
+    public float RoadWidth => ROAD_WIDTH;
 
     public RoadController()
     {
@@ -25,7 +32,16 @@ public class RoadController : IRoadController
     public void Init()
     {
         mPlayerController = SingleManager.Get<IPlayerController>();
-        lastPlane = new Vector3(0, mView.PlanePositionY, 0);
+        lastCreatedPlane = new Vector3(0, mView.PlanePositionY, 0);
+    }
+
+    public void SetView(IRoadView view)
+    {
+        mView = view;
+    }
+
+    public void StartGame()
+    {
         BuildFirstRoad();
     }
 
@@ -48,24 +64,10 @@ public class RoadController : IRoadController
             planesPositions.Dequeue();
             mView.RemoveOldestPlane();
         }
-        Vector3 newPosition = lastPlane + new Vector3(0, 0, mView.PlaneSize);
+        Vector3 newPosition = lastCreatedPlane + new Vector3(0, 0, mView.PlaneSize);
         planesPositions.Enqueue(newPosition);
         mView.AddPlane(newPosition);
-        lastPlane = newPosition;
-    }
-
-    private bool NeedToBuild { get => lastPlane.z - mPlayerController.PlayerPosition.z < ROAD_LENGTH; }
-
-    private bool NeedToDestroy { get => planesPositions.Count != 0 && mPlayerController.PlayerPosition.z - planesPositions.Peek().z > mView.PlaneSize; }
-
-    public void SetView(IRoadView view)
-    {
-        mView = view;
-    }
-
-    public void StartGame()
-    {
-        
+        lastCreatedPlane = newPosition;
     }
 
     public void Destroy()

@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class PlayerController : IPlayerController 
 {
-    private const float ROAD_WIDTH = 6;
     private const float MAXIMUM_MOVMENT_SPEED = 20;
     private const float MAXIMUM_ROTATION_AXIS = 45;
     private const float PLAYER_SPPED = 20;
 
     #region Dependencis
     private IInputListener mInputListener;
+    private IRoadController mRoadController;
     #endregion
 
     private IPlayerView mView;
@@ -24,6 +24,7 @@ public class PlayerController : IPlayerController
     public void Init()
     {
         mInputListener = SingleManager.Get<IInputListener>();
+        mRoadController = SingleManager.Get<IRoadController>();
     }
 
     public void SetView(IPlayerView playerView)
@@ -45,7 +46,7 @@ public class PlayerController : IPlayerController
     {
         Vector3 position = mView.Position;
         float step = MAXIMUM_MOVMENT_SPEED * axis * Time.deltaTime;
-        if(Math.Abs(position.x + step)<ROAD_WIDTH/2)
+        if(Math.Abs(position.x + step)< mRoadController.RoadWidth/ 2)
             mView.Position = new Vector3(position.x + step, position.y, position.z);
         Vector3 rotation = mView.Rotation.eulerAngles;
         rotation.z = MAXIMUM_ROTATION_AXIS * axis * -1;

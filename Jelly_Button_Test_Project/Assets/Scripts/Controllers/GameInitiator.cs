@@ -20,12 +20,15 @@ public class GameInitiator : MonoBehaviour
             controller.Init();
 
         SingleManager.Get<IPlayerController>().StartGame();//TODO FIx:(
+        SingleManager.Get<IRoadController>().StartGame();//TODO FIx:(
+        SingleManager.Get<IObstaclesController>().StartGame();//TODO FIx:(
     }
 
     private void ConfigControllers()
     {
         controllers.Add(new PlayerController());
         controllers.Add(new RoadController());
+        controllers.Add(new ObstaclesController());
     }
 
     private void Update()
