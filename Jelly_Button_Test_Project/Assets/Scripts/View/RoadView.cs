@@ -6,14 +6,14 @@ public class RoadView : MonoBehaviour, IRoadView
     private IRoadController mController;
 
     [SerializeField]
-    private Transform planeInstance;
+    private MeshRenderer planeInstance;
 
-    private Queue<Transform> pool = new Queue<Transform>();
-    private Queue<Transform> activePlanes = new Queue<Transform>();
+    private readonly Queue<MeshRenderer> pool = new Queue<MeshRenderer>();
+    private readonly Queue<MeshRenderer> activePlanes = new Queue<MeshRenderer>();
 
-    public float PlaneSize => 10; //TODO get it from model
+    public float PlaneSize => planeInstance.GetComponent<MeshRenderer>().bounds.size.z;
 
-    public float PlanePositionY => planeInstance.position.y;
+    public float PlanePositionY => planeInstance.transform.position.y;
 
     private void Awake()
     {
@@ -23,19 +23,19 @@ public class RoadView : MonoBehaviour, IRoadView
 
     public void AddPlane(Vector3 pos)
     {
-        Transform p;
+        MeshRenderer p;
         if (pool.Count == 0)
-            p = Instantiate(planeInstance, planeInstance.parent);
+            p = Instantiate(planeInstance, planeInstance.transform.parent);
         else
             p = pool.Dequeue();
         activePlanes.Enqueue(p);
-        p.position = pos;
+        p.transform.position = pos;
         p.gameObject.SetActive(true);
     }
 
     public void RemoveOldestPlane()
     {
-        Transform oldestPlane = activePlanes.Dequeue();
+        MeshRenderer oldestPlane = activePlanes.Dequeue();
         oldestPlane.gameObject.SetActive(false);
         pool.Enqueue(oldestPlane);
     }

@@ -14,7 +14,7 @@ public class ScoreController : IScoreController
 
     public int CurrentScore { get; private set; }
 
-    public int BestScore { get; private set; }//TODO
+    public int BestScore { get; private set; }
 
     private bool boost = false;
 
