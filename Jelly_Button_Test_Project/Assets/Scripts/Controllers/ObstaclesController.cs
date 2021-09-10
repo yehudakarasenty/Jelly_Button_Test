@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObstaclesController : IObstaclesController
 {
-    private const float FIRST_DISTANCE_BETWEEN_OBSTACLES_Z = 70;
+    private const float FIRST_DISTANCE_BETWEEN_OBSTACLES_Z = 50;
 
     private IRoadController mRoadController;
     private IPlayerController mPlayerController;
