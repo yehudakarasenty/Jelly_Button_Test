@@ -5,10 +5,13 @@ using UnityEngine.Events;
 
 public class ObstaclesController : IObstaclesController
 {
-    private const float FIRST_DISTANCE_BETWEEN_OBSTACLES_Z = 50;
+    private const float MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z = 50;
+    private const float MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z = 5;
+    private const float SECONDS_UNTIL_HIGHEST_DIFFICULTY = 120;
 
     private IRoadController mRoadController;
     private IPlayerController mPlayerController;
+    private ITimeController mTimeController;
 
     private IObstaclesView mView;
 
@@ -35,7 +38,10 @@ public class ObstaclesController : IObstaclesController
     {
         mRoadController = SingleManager.Get<IRoadController>();
         mPlayerController = SingleManager.Get<IPlayerController>();
-        minimumDistanceBetweenObstaclesZ = FIRST_DISTANCE_BETWEEN_OBSTACLES_Z;
+        mTimeController = SingleManager.Get<ITimeController>();
+
+        mTimeController.RegisterToSecondsNotifier(UpdateDifficulty);
+        minimumDistanceBetweenObstaclesZ = MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z;
         lastCreatedObstaclePosition = new Vector3(0, mView.ObstaclePositionY, 0);
     }
 
@@ -52,7 +58,7 @@ public class ObstaclesController : IObstaclesController
 
     private void CreateFirstObstacles()
     {
-        int obstacles = (int)Math.Ceiling(mRoadController.RoadLength / FIRST_DISTANCE_BETWEEN_OBSTACLES_Z);
+        int obstacles = (int)Math.Ceiling(mRoadController.RoadLength / MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z);
         for (int i = 0; i < obstacles; i++)
             CreateObstacle();
     }
@@ -90,11 +96,6 @@ public class ObstaclesController : IObstaclesController
             DestroyLastObstacle();
     }
 
-    public void Destroy()
-    {
-        SingleManager.Remove<IObstaclesController>();
-    }
-
     public void RegisterToObstaclePassedNotifyer(UnityAction action)
     {
         obstaclePassedEvent.AddListener(action);
@@ -103,5 +104,21 @@ public class ObstaclesController : IObstaclesController
     public void RemoveFromObstaclePassedNotifyer(UnityAction action)
     {
         obstaclePassedEvent.RemoveListener(action);
+    }
+
+    private void UpdateDifficulty()
+    {
+        if (minimumDistanceBetweenObstaclesZ > MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z) 
+        {
+            float difficultyPrecentage = mTimeController.SecondsCounter / SECONDS_UNTIL_HIGHEST_DIFFICULTY;
+            minimumDistanceBetweenObstaclesZ = Mathf.Lerp(MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z, MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z, difficultyPrecentage);
+            Debug.LogError("minimumDistanceBetweenObstaclesZ: " + minimumDistanceBetweenObstaclesZ);
+        } 
+    }
+
+    public void Destroy()
+    {
+        SingleManager.Remove<IObstaclesController>();
+        mTimeController.RemoveFromSecondsNotifier(UpdateDifficulty);
     }
 }
