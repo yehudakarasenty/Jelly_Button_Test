@@ -32,7 +32,7 @@ public class RoadController : IRoadController
     public void Init()
     {
         mPlayerController = SingleManager.Get<IPlayerController>();
-        lastCreatedPlane = new Vector3(0, mView.PlanePositionY, 0);
+        lastCreatedPlane = new Vector3(0, mView.PlanePositionY, -mView.PlaneSize);
         BuildFirstRoad();
     }
 
