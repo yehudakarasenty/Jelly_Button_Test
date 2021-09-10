@@ -9,7 +9,7 @@ public class UiView : MonoBehaviour, IUiView
     private Text currentScoreText;
 
     [SerializeField]
-    private Text bestScoreText;
+    private Text highestScoreText;
 
     [SerializeField]
     private Text timeText;
@@ -22,6 +22,9 @@ public class UiView : MonoBehaviour, IUiView
 
     [SerializeField]
     private Text gameOverText;
+
+    [SerializeField]
+    private Text highestScoreCongratText;
 
     [SerializeField]
     private Button playAgainButton;
@@ -39,11 +42,12 @@ public class UiView : MonoBehaviour, IUiView
     }
 
     public string CurrentScoreText { set => currentScoreText.text = value; }
-    public string BestScoreText { set => bestScoreText.text = value; }
+    public string HighestScoreText { set => highestScoreText.text = value; }
     public string TimeText { set => timeText.text = value; }
     public string ObstaclesText { set => asteroidsText.text = value; }
     public bool ShowCurrentScoreText { set => currentScoreText.enabled = value; }
-    public bool ShowBestScoreText { set => bestScoreText.enabled = value; }
+    public bool ShowHighestScoreText { set => highestScoreText.enabled = value; }
+    public bool ShowHighestScoreCongratText { set => highestScoreCongratText.enabled = value; }
     public bool ShowTimeText { set => timeText.enabled = value; }
     public bool ShowObstaclesText { set => asteroidsText.enabled = value; }
     public bool ShowPressOnAnyKeyText { set => pressAnyKeyText.enabled = value; }

@@ -191,7 +191,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Score: '
+  m_Text: 'Score: 0'
 --- !u!222 &92445217
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8631e3b4fe615464f84ab4ec70f1d9fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  planeInstance: {fileID: 1659240985}
+  planeInstance: {fileID: 1659240987}
 --- !u!1001 &575174688
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1123,6 +1123,84 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1210886278}
   m_CullTransparentMesh: 0
+--- !u!1 &1216775017
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1216775018}
+  - component: {fileID: 1216775020}
+  - component: {fileID: 1216775019}
+  m_Layer: 5
+  m_Name: HighestScoreCongrat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1216775018
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216775017}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1809369216}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 179}
+  m_SizeDelta: {x: 1000, y: 500}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1216775019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216775017}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 1, b: 0.060104847, a: 1}
+  m_RaycastTarget: 0
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 50
+    m_FontStyle: 1
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 100
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: congratulations, you broke your high score!
+--- !u!222 &1216775020
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216775017}
+  m_CullTransparentMesh: 0
 --- !u!1 &1360292555
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,7 +1336,7 @@ GameObject:
   - component: {fileID: 1560828688}
   - component: {fileID: 1560828687}
   m_Layer: 5
-  m_Name: BestScoreText
+  m_Name: HighestScoreText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1315,7 +1393,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Best Score: '
+  m_Text: 'Highest Score: 0'
 --- !u!222 &1560828688
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1428,6 +1506,12 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1659240987 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 9003595582230007763, guid: 478c6ed5dab9e51478149ae27517d1da,
+    type: 3}
+  m_PrefabInstance: {fileID: 9003595583889247688}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1749655489
 GameObject:
   m_ObjectHideFlags: 0
@@ -1497,7 +1581,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Asteroids:'
+  m_Text: 'Asteroids: 0'
 --- !u!222 &1749655492
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1541,6 +1625,7 @@ RectTransform:
   - {fileID: 700648941}
   - {fileID: 2121497759}
   - {fileID: 1210886279}
+  - {fileID: 1216775018}
   m_Father: {fileID: 1974379821}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1562,11 +1647,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentScoreText: {fileID: 92445216}
-  bestScoreText: {fileID: 1560828687}
+  highestScoreText: {fileID: 1560828687}
   timeText: {fileID: 1545476378}
   asteroidsText: {fileID: 1749655491}
   pressAnyKeyText: {fileID: 700648942}
   gameOverText: {fileID: 2121497760}
+  highestScoreCongratText: {fileID: 1216775019}
   playAgainButton: {fileID: 1210886280}
 --- !u!1001 &1876436385
 PrefabInstance:

@@ -21,7 +21,7 @@ public class UiController : IUiController
         mGameStateController = SingleManager.Get<IGameStateController>();
 
         mScoreController.RegisterToScoreChangeNotifyer(UpdateScore);
-        mScoreController.RegisterToBestScoreChangeNotifyer(UpdateBestScore);
+        mScoreController.RegisterToHighestScoreChangeNotifyer(UpdateHighestScore);
         mObstaclesController.RegisterToObstaclePassedNotifyer(UpdateObstaclesAmount);
         mGameStateController.RegisterToGameStateChange(GameStateChange);
     }
@@ -31,8 +31,8 @@ public class UiController : IUiController
         switch (mGameStateController.GameState)
         {
             case GameState.READY_TO_PLAY:
-                UpdateBestScore();
-                mView.ShowBestScoreText = true;
+                UpdateHighestScore();
+                mView.ShowHighestScoreText = true;
                 mView.ShowPressOnAnyKeyText = true;
                 mView.ShowCurrentScoreText = false;
                 mView.ShowObstaclesText = false;
@@ -53,6 +53,7 @@ public class UiController : IUiController
                 mView.ShowTimeText = true;
                 mView.ShowGameOver = true;
                 mView.ShowPlayAgainButton = true;
+                mView.ShowHighestScoreCongratText = mScoreController.IsHighestScore;
                 break;
             default:
                 break;
@@ -72,7 +73,7 @@ public class UiController : IUiController
 
     private void UpdateScore()=> mView.CurrentScoreText = "Score: " + mScoreController.CurrentScore;
 
-    private void UpdateBestScore()=> mView.BestScoreText = "Best Score: " + mScoreController.BestScore;
+    private void UpdateHighestScore()=> mView.HighestScoreText = "Highest Score: " + mScoreController.HighestScore;
 
     private void UpdateObstaclesAmount()=>  mView.ObstaclesText = "Asteroids: "+ mObstaclesController.PassedObstacleAmount;
 
@@ -85,7 +86,7 @@ public class UiController : IUiController
     {
         SingleManager.Remove<IUiController>();
         mScoreController.RemoveFromScoreChangeNotifyer(UpdateScore);
-        mScoreController.RemoveFromBestScoreChangeNotifyer(UpdateBestScore);
+        mScoreController.RemoveFromHighestScoreChangeNotifyer(UpdateHighestScore);
         mObstaclesController.RemoveFromObstaclePassedNotifyer(UpdateObstaclesAmount);
         mGameStateController.RemoveFromGameStateChange(GameStateChange);
     }

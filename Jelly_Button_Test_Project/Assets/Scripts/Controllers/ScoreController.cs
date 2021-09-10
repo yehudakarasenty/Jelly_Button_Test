@@ -4,17 +4,20 @@ using UnityEngine.Events;
 
 public class ScoreController : IScoreController
 {
+    private const string HIGHEST_SCORE_KEY = "highest_score";
     private IObstaclesController mObstaclesController;
     private ITimeController mTimeController;
     private IPlayerController mPlayerController;
     private IGameStateController mGameStateController;
 
     private readonly UnityEvent scoreChangeEvent = new UnityEvent();
-    private readonly UnityEvent bestScoreChangeEvent = new UnityEvent();
+    private readonly UnityEvent highestScoreChangeEvent = new UnityEvent();
 
     public int CurrentScore { get; private set; }
 
-    public int BestScore { get; private set; }
+    public int HighestScore { get; private set; }
+
+    public bool IsHighestScore { get; private set; } = false;
 
     private bool boost = false;
 
@@ -35,7 +38,7 @@ public class ScoreController : IScoreController
         mPlayerController.RegisterToOnBoostChange(BoostChanged);
         mGameStateController.RegisterToGameStateChange(GameStateChange);
 
-        BestScore = PlayerPrefs.GetInt("best_score", 0);
+        HighestScore = PlayerPrefs.GetInt(HIGHEST_SCORE_KEY, 0);
         CurrentScore = 0;
     }
 
@@ -48,8 +51,8 @@ public class ScoreController : IScoreController
             case GameState.PLAYING:
                 break;
             case GameState.GAME_OVER:
-                if (BestScore > PlayerPrefs.GetInt("best_score", 0))
-                    PlayerPrefs.SetInt("best_score", BestScore);
+                if (HighestScore > PlayerPrefs.GetInt(HIGHEST_SCORE_KEY, 0))
+                    PlayerPrefs.SetInt(HIGHEST_SCORE_KEY, HighestScore);
                 break;
             default:
                 break;
@@ -66,10 +69,11 @@ public class ScoreController : IScoreController
     {
         CurrentScore += scoreToAdd;
         scoreChangeEvent.Invoke();
-        if (CurrentScore > BestScore)
+        if (CurrentScore > HighestScore)
         {
-            BestScore = CurrentScore;
-            bestScoreChangeEvent.Invoke();
+            IsHighestScore = true;
+            HighestScore = CurrentScore;
+            highestScoreChangeEvent.Invoke();
         }
     }
 
@@ -77,9 +81,9 @@ public class ScoreController : IScoreController
 
     public void RemoveFromScoreChangeNotifyer(UnityAction action)=> scoreChangeEvent.RemoveListener(action);
 
-    public void RegisterToBestScoreChangeNotifyer(UnityAction action)=> bestScoreChangeEvent.AddListener(action);
+    public void RegisterToHighestScoreChangeNotifyer(UnityAction action)=> highestScoreChangeEvent.AddListener(action);
 
-    public void RemoveFromBestScoreChangeNotifyer(UnityAction action) => bestScoreChangeEvent.RemoveListener(action);
+    public void RemoveFromHighestScoreChangeNotifyer(UnityAction action) => highestScoreChangeEvent.RemoveListener(action);
 
     public void Update() {}
 
