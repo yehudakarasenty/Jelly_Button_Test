@@ -9,4 +9,5 @@ public interface IPlayerController: IController
     void RegisterToOnBoostChange(UnityAction<bool> action);
     void RemoveFromOnBoostChange(UnityAction<bool> action);
     Vector3 PlayerPosition { get; }
+    Vector3 PlayerSize { get; }
 }

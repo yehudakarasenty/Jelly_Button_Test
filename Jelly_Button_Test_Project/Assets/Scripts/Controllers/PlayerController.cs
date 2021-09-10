@@ -21,6 +21,7 @@ public class PlayerController : IPlayerController
 
     private float speed;
     private bool boost = false;
+    public Vector3 PlayerSize { get => mView.Size; }
 
     public PlayerController()
     {

@@ -20,7 +20,7 @@ public class ObstaclesController : IObstaclesController
     private static System.Random random = new System.Random();
 
     public bool CanAddNewObstacle { get => mPlayerController.PlayerPosition.z + mRoadController.RoadLength - lastCreatedObstaclePosition.z >= minimumDistanceBetweenObstaclesZ; }
-    public bool NeedToDestroy { get => obstaclesPositions.Count != 0 && mPlayerController.PlayerPosition.z - obstaclesPositions.Peek().z > minimumDistanceBetweenObstaclesZ; }
+    public bool NeedToDestroy { get => obstaclesPositions.Count != 0 && mPlayerController.PlayerPosition.z - obstaclesPositions.Peek().z > mPlayerController.PlayerSize.z; }
 
     public ObstaclesController()
     {
@@ -54,17 +54,19 @@ public class ObstaclesController : IObstaclesController
 
     private void CreateObstacle()
     {
-        if (NeedToDestroy)
-        {
-            obstaclesPositions.Dequeue();
-            mView.RemoveOldestObstacle();
-        }
+
         float disToAdd = GetRandomNumberInRange(0,20);
         float randomXPos = GetRandomNumberInRange(-mRoadController.RoadWidth / 2, mRoadController.RoadWidth/2);
         Vector3 newPosition =  new Vector3(randomXPos, 0, lastCreatedObstaclePosition.z + minimumDistanceBetweenObstaclesZ + disToAdd);
         obstaclesPositions.Enqueue(newPosition);
         mView.AddObstacle(newPosition);
         lastCreatedObstaclePosition = newPosition;
+    }
+
+    private void DestroyLastObstacle()
+    {
+        obstaclesPositions.Dequeue();
+        mView.RemoveOldestObstacle();
     }
 
     private float GetRandomNumberInRange(double minNumber, double maxNumber)
@@ -77,6 +79,8 @@ public class ObstaclesController : IObstaclesController
     {
         if (CanAddNewObstacle)
             CreateObstacle();
+        if (NeedToDestroy)
+            DestroyLastObstacle();
     }
 
     public void Destroy()
