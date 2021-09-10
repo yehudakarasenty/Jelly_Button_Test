@@ -26,5 +26,5 @@ public class LabelsView : MonoBehaviour, ILabelsView
     public string CurrentScoreText { set => currentScoreText.text = value; }
     public string BestScoreText { set => bestScoreText.text = value; }
     public string TimeText { set => timeText.text = value; }
-    public string AsteroidsText { set => asteroidsText.text = value; }
+    public string ObstaclesText { set => asteroidsText.text = value; }
 }
