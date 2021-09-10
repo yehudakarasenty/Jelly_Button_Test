@@ -23,6 +23,7 @@ public class GameInitiator : MonoBehaviour
         SingleManager.Get<IRoadController>().StartGame();//TODO FIx:(
         SingleManager.Get<IObstaclesController>().StartGame();//TODO FIx:(
         SingleManager.Get<ITimeController>().StartGame();//TODO FIx:(
+        SingleManager.Get<IScoreController>().StartGame();//TODO FIx:(
     }
 
     private void ConfigControllers()
@@ -33,6 +34,7 @@ public class GameInitiator : MonoBehaviour
         controllers.Add(new SmoothFollowContoller());
         controllers.Add(new LabelsController());
         controllers.Add(new TimeController());
+        controllers.Add(new ScoreController());
     }
 
     private void Update()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ObstaclesController : IObstaclesController
 {
@@ -15,12 +16,15 @@ public class ObstaclesController : IObstaclesController
 
     private Vector3 lastCreatedObstaclePosition;
 
-    private Queue<Vector3> obstaclesPositions = new Queue<Vector3>();
+    private readonly Queue<Vector3> obstaclesPositions = new Queue<Vector3>();
 
     private static System.Random random = new System.Random();
 
     public bool CanAddNewObstacle { get => mPlayerController.PlayerPosition.z + mRoadController.RoadLength - lastCreatedObstaclePosition.z >= minimumDistanceBetweenObstaclesZ; }
     public bool NeedToDestroy { get => obstaclesPositions.Count != 0 && mPlayerController.PlayerPosition.z - obstaclesPositions.Peek().z > mPlayerController.PlayerSize.z; }
+
+    public int PassedObstacleAmount { get; private set; }
+    private readonly UnityEvent obstaclePassedEvent = new UnityEvent();
 
     public ObstaclesController()
     {
@@ -43,6 +47,7 @@ public class ObstaclesController : IObstaclesController
     public void StartGame()
     {
         CreateFirstObstacles();
+        PassedObstacleAmount = 0;
     }
 
     private void CreateFirstObstacles()
@@ -67,6 +72,8 @@ public class ObstaclesController : IObstaclesController
     {
         obstaclesPositions.Dequeue();
         mView.RemoveOldestObstacle();
+        PassedObstacleAmount++;
+        obstaclePassedEvent.Invoke();
     }
 
     private float GetRandomNumberInRange(double minNumber, double maxNumber)
@@ -86,5 +93,15 @@ public class ObstaclesController : IObstaclesController
     public void Destroy()
     {
         SingleManager.Remove<IObstaclesController>();
+    }
+
+    public void RegisterToObstaclePassedNotifyer(UnityAction action)
+    {
+        obstaclePassedEvent.AddListener(action);
+    }
+
+    public void RemoveFromObstaclePassedNotifyer(UnityAction action)
+    {
+        obstaclePassedEvent.RemoveListener(action);
     }
 }

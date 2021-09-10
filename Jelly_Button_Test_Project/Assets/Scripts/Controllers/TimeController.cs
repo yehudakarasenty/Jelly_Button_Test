@@ -5,7 +5,7 @@ public class TimeController : ITimeController
 {
     public float SecondsCounter { get; private set; }
 
-    private readonly UnityEvent SecondPassedEvent;
+    private readonly UnityEvent SecondPassedEvent = new UnityEvent();
 
     private int lastNotifyedSecond = 0;
 
@@ -28,8 +28,7 @@ public class TimeController : ITimeController
         if (SecondsCounter > lastNotifyedSecond + 1)
         {
             lastNotifyedSecond++;
-            if (SecondPassedEvent != null)
-                SecondPassedEvent.Invoke();
+            SecondPassedEvent.Invoke();
         }
     }
 

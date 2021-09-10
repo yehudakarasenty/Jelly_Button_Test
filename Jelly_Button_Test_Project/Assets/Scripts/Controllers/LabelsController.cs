@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class LabelsController : ILabelsController
 {
     private ITimeController mTimeController;
+    private IScoreController mScoreController;
     private ILabelsView mView;
 
     public LabelsController()
@@ -16,11 +14,15 @@ public class LabelsController : ILabelsController
     public void Init()
     {
         mTimeController = SingleManager.Get<ITimeController>();
+        mScoreController = SingleManager.Get<IScoreController>();
+        mScoreController.RegisterToScoreChangeNotifyer(UpdateScore);
+        mScoreController.RegisterToBestScoreChangeNotifyer(UpdateBestScore);
     }
 
     public void SetView(ILabelsView view)
     {
         mView = view;
+        UpdateBestScore();
     }
 
     public void Update()
@@ -28,8 +30,19 @@ public class LabelsController : ILabelsController
         mView.TimeText = TimeSpan.FromSeconds(mTimeController.SecondsCounter).ToString("mm':'ss':'ff");
     }
 
+    private void UpdateScore()
+    {
+        mView.CurrentScoreText = "Score: " + mScoreController.CurrentScore;
+    }
+
+    private void UpdateBestScore()
+    {
+        mView.BestScoreText = "Best Score: " + mScoreController.BestScore;
+    }
+
     public void Destroy()
     {
         SingleManager.Remove<ILabelsController>();
+        mScoreController.RemoveFromScoreChangeNotifyer(UpdateScore);
     }
 }
