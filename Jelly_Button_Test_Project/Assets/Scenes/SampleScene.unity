@@ -1192,7 +1192,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: congratulations, you broke your high score!
+  m_Text: Congratulations, you broke your high score!
 --- !u!222 &1216775020
 CanvasRenderer:
   m_ObjectHideFlags: 0
