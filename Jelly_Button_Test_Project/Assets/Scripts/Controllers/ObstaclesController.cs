@@ -6,8 +6,10 @@ using UnityEngine.Events;
 public class ObstaclesController : IObstaclesController
 {
     private const float MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z = 50;
-    private const float MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z = 5;
+    private const float MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z = 10;
     private const float SECONDS_UNTIL_HIGHEST_DIFFICULTY = 120;
+    private const float MAXIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES = 20;
+    private const float MINIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES = 10;
 
     private IRoadController mRoadController;
     private IPlayerController mPlayerController;
@@ -16,6 +18,7 @@ public class ObstaclesController : IObstaclesController
     private IObstaclesView mView;
 
     private float minimumDistanceBetweenObstaclesZ;
+    private float maxDistanceToAddRandom;
 
     private Vector3 lastCreatedObstaclePosition;
 
@@ -42,6 +45,7 @@ public class ObstaclesController : IObstaclesController
 
         mTimeController.RegisterToSecondsNotifier(UpdateDifficulty);
         minimumDistanceBetweenObstaclesZ = MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z;
+        maxDistanceToAddRandom = MAXIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES;
         lastCreatedObstaclePosition = new Vector3(0, mView.ObstaclePositionY, 0);
     }
 
@@ -65,8 +69,7 @@ public class ObstaclesController : IObstaclesController
 
     private void CreateObstacle()
     {
-
-        float disToAdd = GetRandomNumberInRange(0,20);
+        float disToAdd = GetRandomNumberInRange(0, maxDistanceToAddRandom);
         float randomXPos = GetRandomNumberInRange(-mRoadController.RoadWidth / 2, mRoadController.RoadWidth/2);
         Vector3 newPosition =  new Vector3(randomXPos, 0, lastCreatedObstaclePosition.z + minimumDistanceBetweenObstaclesZ + disToAdd);
         obstaclesPositions.Enqueue(newPosition);
@@ -108,11 +111,11 @@ public class ObstaclesController : IObstaclesController
 
     private void UpdateDifficulty()
     {
-        if (minimumDistanceBetweenObstaclesZ > MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z) 
+        if (minimumDistanceBetweenObstaclesZ > MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z)
         {
-            float difficultyPrecentage = mTimeController.SecondsCounter / SECONDS_UNTIL_HIGHEST_DIFFICULTY;
+            float difficultyPrecentage = Math.Min(mTimeController.SecondsCounter / SECONDS_UNTIL_HIGHEST_DIFFICULTY, 1);
             minimumDistanceBetweenObstaclesZ = Mathf.Lerp(MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z, MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z, difficultyPrecentage);
-            Debug.LogError("minimumDistanceBetweenObstaclesZ: " + minimumDistanceBetweenObstaclesZ);
+            maxDistanceToAddRandom = Mathf.Lerp(MAXIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES, MINIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES, difficultyPrecentage);
         } 
     }
 
