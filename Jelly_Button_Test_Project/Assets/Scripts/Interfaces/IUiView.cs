@@ -10,4 +10,5 @@
     bool ShowObstaclesText { set; }
     bool ShowPressOnAnyKeyText { set; }
     bool ShowGameOver { set; }
+    bool ShowPlayAgainButton { set; }
 }

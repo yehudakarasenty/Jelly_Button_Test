@@ -36,14 +36,14 @@ public class ScoreController : IScoreController
         mGameStateController.RegisterToGameStateChange(GameStateChange);
 
         BestScore = PlayerPrefs.GetInt("best_score", 0);
+        CurrentScore = 0;
     }
 
     private void GameStateChange()
     {
         switch (mGameStateController.GameState)
         {
-            case GameState.APP_INITED:
-                CurrentScore = 0;
+            case GameState.READY_TO_PLAY:
                 break;
             case GameState.PLAYING:
                 break;

@@ -14,7 +14,6 @@ public class ObstaclesController : IObstaclesController
     private IRoadController mRoadController;
     private IPlayerController mPlayerController;
     private ITimeController mTimeController;
-    private IGameStateController mGameStateController;
 
     private IObstaclesView mView;
 
@@ -43,30 +42,13 @@ public class ObstaclesController : IObstaclesController
         mRoadController = SingleManager.Get<IRoadController>();
         mPlayerController = SingleManager.Get<IPlayerController>();
         mTimeController = SingleManager.Get<ITimeController>();
-        mGameStateController = SingleManager.Get<IGameStateController>();
 
         mTimeController.RegisterToSecondsNotifier(UpdateDifficulty);
         minimumDistanceBetweenObstaclesZ = MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z;
         maxDistanceToAddRandom = MAXIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES;
         lastCreatedObstaclePosition = new Vector3(0, mView.ObstaclePositionY, 0);
-        mGameStateController.RegisterToGameStateChange(GameStateChange);
-    }
-
-    private void GameStateChange()
-    {
-        switch (mGameStateController.GameState)
-        {
-            case GameState.APP_INITED:
-                CreateFirstObstacles();
-                PassedObstacleAmount = 0;
-                break;
-            case GameState.PLAYING:
-                break;
-            case GameState.GAME_OVER:
-                break;
-            default:
-                break;
-        }
+        CreateFirstObstacles();
+        PassedObstacleAmount = 0;
     }
 
     public void SetView(IObstaclesView view)
@@ -137,6 +119,5 @@ public class ObstaclesController : IObstaclesController
     {
         SingleManager.Remove<IObstaclesController>();
         mTimeController.RemoveFromSecondsNotifier(UpdateDifficulty);
-        mGameStateController.RemoveFromGameStateChange(GameStateChange);
     }
 }

@@ -103,11 +103,6 @@ public class PlayerController : IPlayerController
         onPlayerCollided.Invoke();
     }
 
-    public void EndGame()
-    {
-        throw new NotImplementedException(); //TODO
-    }
-
     public void Destroy()
     {
         SingleManager.Remove<IPlayerController>();

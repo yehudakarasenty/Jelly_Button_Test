@@ -30,23 +30,29 @@ public class UiController : IUiController
     {
         switch (mGameStateController.GameState)
         {
-            case GameState.APP_INITED:
+            case GameState.READY_TO_PLAY:
                 UpdateBestScore();
                 mView.ShowBestScoreText = true;
                 mView.ShowPressOnAnyKeyText = true;
+                mView.ShowCurrentScoreText = false;
+                mView.ShowObstaclesText = false;
+                mView.ShowTimeText = false;
+                mView.ShowPlayAgainButton= false;
                 break;
             case GameState.PLAYING:
                 mView.ShowPressOnAnyKeyText = false;
                 mView.ShowCurrentScoreText = true;
                 mView.ShowObstaclesText = true;
                 mView.ShowTimeText = true;
+                mView.ShowPlayAgainButton = false;
                 break;
             case GameState.GAME_OVER:
-                mView.ShowPressOnAnyKeyText = true; //TODO: 
-                mView.ShowCurrentScoreText = false;
-                mView.ShowObstaclesText = false;
-                mView.ShowTimeText = false;
+                mView.ShowPressOnAnyKeyText = false;
+                mView.ShowCurrentScoreText = true;
+                mView.ShowObstaclesText = true;
+                mView.ShowTimeText = true;
                 mView.ShowGameOver = true;
+                mView.ShowPlayAgainButton = true;
                 break;
             default:
                 break;
@@ -69,6 +75,11 @@ public class UiController : IUiController
     private void UpdateBestScore()=> mView.BestScoreText = "Best Score: " + mScoreController.BestScore;
 
     private void UpdateObstaclesAmount()=>  mView.ObstaclesText = "Asteroids: "+ mObstaclesController.PassedObstacleAmount;
+
+    public void PlayAgainButtonClicked()
+    {
+        mGameStateController.PlayAgain();
+    }
 
     public void Destroy()
     {

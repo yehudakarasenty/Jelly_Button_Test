@@ -3,7 +3,6 @@ using UnityEngine.Events;
 
 public interface IPlayerController: IController
 {
-    void EndGame();
     void SetView(IPlayerView playerView);
     void RegisterToOnBoostChange(UnityAction<bool> action);
     void RemoveFromOnBoostChange(UnityAction<bool> action);

@@ -1,4 +1,6 @@
-﻿using UnityEngine.Events;
+﻿using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameStateController : IGameStateController
 {
@@ -21,12 +23,23 @@ public class GameStateController : IGameStateController
 
     public void AppInited()
     {
-        ChangeState(GameState.APP_INITED);
+        ChangeState(GameState.READY_TO_PLAY);
     }
 
     private void GameOver()
     {
         ChangeState(GameState.GAME_OVER);
+    }
+
+    public void PlayAgain()
+    {
+        if (GameState != GameState.GAME_OVER)
+            Debug.LogError("Play again pressed but GameState != GameState.GAME_OVER");
+        else
+        {
+            ChangeState(GameState.READY_TO_PLAY);
+            SceneManager.LoadScene(0);
+        }
     }
 
     private void ChangeState(GameState state)
@@ -47,12 +60,12 @@ public class GameStateController : IGameStateController
 
     public void Update()
     {
-        if (GameState == GameState.APP_INITED && mInputListener.AnyKey)
+        if (GameState == GameState.READY_TO_PLAY && mInputListener.AnyKey)
             ChangeState(GameState.PLAYING);
     }
 
     public void Destroy()
     {
-        
+        SingleManager.Remove<IGameStateController>();
     }
 }
