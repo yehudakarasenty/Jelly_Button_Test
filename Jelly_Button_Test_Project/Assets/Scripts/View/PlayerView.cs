@@ -17,4 +17,9 @@ public class PlayerView : MonoBehaviour, IPlayerView
         mController = SingleManager.Get<IPlayerController>();
         mController.SetView(this);
     }
+
+    public void OnCollision(Collision other)
+    {
+        Debug.LogError("GAME OVER!!");
+    }
 }
