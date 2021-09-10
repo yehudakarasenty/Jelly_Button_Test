@@ -17,6 +17,8 @@ public class ObstaclesController : IObstaclesController
 
     private Queue<Vector3> obstaclesPositions = new Queue<Vector3>();
 
+    private static System.Random random = new System.Random();
+
     public bool CanAddNewObstacle { get => mPlayerController.PlayerPosition.z + mRoadController.RoadLength - lastCreatedObstaclePosition.z >= minimumDistanceBetweenObstaclesZ; }
     public bool NeedToDestroy { get => obstaclesPositions.Count != 0 && mPlayerController.PlayerPosition.z - obstaclesPositions.Peek().z > minimumDistanceBetweenObstaclesZ; }
 
@@ -67,7 +69,8 @@ public class ObstaclesController : IObstaclesController
 
     private float GetRandomNumberInRange(double minNumber, double maxNumber)
     {
-        return (float)(new System.Random().NextDouble() * (maxNumber - minNumber) + minNumber);
+        double val = (random.NextDouble() * (maxNumber - minNumber) + minNumber);
+        return (float)val;
     }
 
     public void Update()
