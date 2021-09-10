@@ -18,8 +18,8 @@ public class PlayerView : MonoBehaviour, IPlayerView
         mController.SetView(this);
     }
 
-    public void OnCollision(Collision other)
+    public void OnCollision()
     {
-        Debug.LogError("GAME OVER!!");
+        mController.PlyerCollided();
     }
 }

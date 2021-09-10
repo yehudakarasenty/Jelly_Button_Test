@@ -7,6 +7,6 @@ public class PlayerCollider : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        mPlyerView.OnCollision(collision);
+        mPlyerView.OnCollision();
     }
 }

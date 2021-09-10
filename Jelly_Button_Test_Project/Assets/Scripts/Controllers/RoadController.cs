@@ -8,6 +8,7 @@ public class RoadController : IRoadController
 
     #region Dependencies
     private IPlayerController mPlayerController;
+    private IGameStateController mGameStateController;
     #endregion
 
     private IRoadView mView;
@@ -32,17 +33,30 @@ public class RoadController : IRoadController
     public void Init()
     {
         mPlayerController = SingleManager.Get<IPlayerController>();
+        mGameStateController = SingleManager.Get<IGameStateController>();
         lastCreatedPlane = new Vector3(0, mView.PlanePositionY, 0);
+        mGameStateController.RegisterToGameStateChange(GameStateChange);
+    }
+
+    private void GameStateChange()
+    {
+        switch (mGameStateController.GameState)
+        {
+            case GameState.APP_INITED:
+                BuildFirstRoad();
+                break;
+            case GameState.PLAYING:
+                break;
+            case GameState.GAME_OVER:
+                break;
+            default:
+                break;
+        }
     }
 
     public void SetView(IRoadView view)
     {
         mView = view;
-    }
-
-    public void StartGame()
-    {
-        BuildFirstRoad();
     }
 
     private void BuildFirstRoad()
@@ -72,6 +86,7 @@ public class RoadController : IRoadController
 
     public void Destroy()
     {
+        mGameStateController.RemoveFromGameStateChange(GameStateChange);
         SingleManager.Remove<IRoadController>();
     }
 }

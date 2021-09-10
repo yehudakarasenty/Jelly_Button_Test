@@ -5,6 +5,8 @@ public class InputListener : MonoBehaviour, IInputListener
 {
     private FloatUnityEvent OnHorizontalChange = new FloatUnityEvent();
 
+    public bool AnyKey { get => Input.anyKey; }
+
     private void Awake()
     {
         SingleManager.Register<IInputListener>(this);

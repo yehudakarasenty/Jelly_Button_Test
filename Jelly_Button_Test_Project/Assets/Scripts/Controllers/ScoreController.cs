@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 public class ScoreController : IScoreController
@@ -6,6 +7,7 @@ public class ScoreController : IScoreController
     private IObstaclesController mObstaclesController;
     private ITimeController mTimeController;
     private IPlayerController mPlayerController;
+    private IGameStateController mGameStateController;
 
     private readonly UnityEvent scoreChangeEvent = new UnityEvent();
     private readonly UnityEvent bestScoreChangeEvent = new UnityEvent();
@@ -26,17 +28,32 @@ public class ScoreController : IScoreController
         mObstaclesController = SingleManager.Get<IObstaclesController>();
         mTimeController = SingleManager.Get<ITimeController>();
         mPlayerController = SingleManager.Get<IPlayerController>();
+        mGameStateController = SingleManager.Get<IGameStateController>();
 
         mObstaclesController.RegisterToObstaclePassedNotifyer(ObstaclePassed);
         mTimeController.RegisterToSecondsNotifier(SecondPassed);
         mPlayerController.RegisterToOnBoostChange(BoostChanged);
+        mGameStateController.RegisterToGameStateChange(GameStateChange);
 
         BestScore = PlayerPrefs.GetInt("best_score", 0);
     }
 
-    public void StartGame()
+    private void GameStateChange()
     {
-        CurrentScore = 0;
+        switch (mGameStateController.GameState)
+        {
+            case GameState.APP_INITED:
+                CurrentScore = 0;
+                break;
+            case GameState.PLAYING:
+                break;
+            case GameState.GAME_OVER:
+                if (BestScore > PlayerPrefs.GetInt("best_score", 0))
+                    PlayerPrefs.SetInt("best_score", BestScore);
+                break;
+            default:
+                break;
+        }
     }
 
     private void BoostChanged(bool boost) => this.boost = boost;
@@ -66,17 +83,12 @@ public class ScoreController : IScoreController
 
     public void Update() {}
 
-    public void EndGame()
-    {
-        if (BestScore > PlayerPrefs.GetInt("best_score", 0))
-            PlayerPrefs.SetInt("best_score", BestScore);
-    }
-
     public void Destroy()
     {
         SingleManager.Remove<IScoreController>();
         mObstaclesController.RemoveFromObstaclePassedNotifyer(ObstaclePassed);
         mTimeController.RemoveFromSecondsNotifier(SecondPassed);
         mPlayerController.RemoveFromOnBoostChange(BoostChanged);
+        mGameStateController.RemoveFromGameStateChange(GameStateChange);
     }
 }

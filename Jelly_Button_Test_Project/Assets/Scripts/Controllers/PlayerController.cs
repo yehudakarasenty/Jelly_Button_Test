@@ -11,13 +11,16 @@ public class PlayerController : IPlayerController
     #region Dependencis
     private IInputListener mInputListener;
     private IRoadController mRoadController;
+    private IGameStateController mGameStateController;
     #endregion
 
     private IPlayerView mView;
 
     public Vector3 PlayerPosition => mView.Position;
 
-    private BoolUnityEvent OnBoostChange = new BoolUnityEvent();
+    private BoolUnityEvent onBoostChange = new BoolUnityEvent();
+
+    private UnityEvent onPlayerCollided = new UnityEvent();
 
     private float speed;
     private bool boost = false;
@@ -32,6 +35,10 @@ public class PlayerController : IPlayerController
     {
         mInputListener = SingleManager.Get<IInputListener>();
         mRoadController = SingleManager.Get<IRoadController>();
+        mGameStateController = SingleManager.Get<IGameStateController>();
+
+        mInputListener.RegisterToHorizontalInput(OnHorizontalInputChange);
+        speed = PLAYER_SPEED;
     }
 
     public void SetView(IPlayerView playerView)
@@ -39,46 +46,61 @@ public class PlayerController : IPlayerController
         mView = playerView;
     }
 
-    public void StartGame()
-    {
-        mInputListener.RegisterToHorizontalInput(OnHorizontalInputChange);
-        speed = PLAYER_SPEED;
-    }
-
     public void Update()
     {
-        bool boost = mInputListener.IsKeyIsDown(KeyCode.Space);
-        if (this.boost != boost)
-            SetBoost(boost);
-        mView.Position += new Vector3(0, 0, speed * Time.deltaTime);
+        if (mGameStateController.GameState == GameState.PLAYING)
+        {
+            bool boost = mInputListener.IsKeyIsDown(KeyCode.Space);
+            if (this.boost != boost)
+                SetBoost(boost);
+            mView.Position += new Vector3(0, 0, speed * Time.deltaTime);
+        }
     }
 
     private void SetBoost(bool boost)
     {
         this.boost = boost;
         speed = PLAYER_SPEED * (boost ? 2 : 1);
-        OnBoostChange.Invoke(boost);
+        onBoostChange.Invoke(boost);
     }
 
     public void RegisterToOnBoostChange(UnityAction<bool> action)
     {
-        OnBoostChange.AddListener(action);
+        onBoostChange.AddListener(action);
     }
 
     public void RemoveFromOnBoostChange(UnityAction<bool> action)
     {
-        OnBoostChange.RemoveListener(action);
+        onBoostChange.RemoveListener(action);
+    }
+
+    public void RegisterToOnPlayerCollided(UnityAction action)
+    {
+        onPlayerCollided.AddListener(action);
+    }
+
+    public void RemoveFromOnPlayerCollided(UnityAction action)
+    {
+        onPlayerCollided.RemoveListener(action);
     }
 
     private void OnHorizontalInputChange(float axis)
     {
-        Vector3 position = mView.Position;
-        float step = MAXIMUM_MOVMENT_SPEED * axis * Time.deltaTime;
-        if(Math.Abs(position.x + step)< mRoadController.RoadWidth/ 2)
-            mView.Position = new Vector3(position.x + step, position.y, position.z);
-        Vector3 rotation = mView.Rotation.eulerAngles;
-        rotation.z = MAXIMUM_ROTATION_AXIS * axis * -1;
-        mView.Rotation = Quaternion.Euler(rotation);
+        if (mGameStateController.GameState == GameState.PLAYING)
+        {
+            Vector3 position = mView.Position;
+            float step = MAXIMUM_MOVMENT_SPEED * axis * Time.deltaTime;
+            if (Math.Abs(position.x + step) < mRoadController.RoadWidth / 2)
+                mView.Position = new Vector3(position.x + step, position.y, position.z);
+            Vector3 rotation = mView.Rotation.eulerAngles;
+            rotation.z = MAXIMUM_ROTATION_AXIS * axis * -1;
+            mView.Rotation = Quaternion.Euler(rotation);
+        }
+    }
+
+    public void PlyerCollided()
+    {
+        onPlayerCollided.Invoke();
     }
 
     public void EndGame()

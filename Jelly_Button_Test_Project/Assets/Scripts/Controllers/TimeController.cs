@@ -1,8 +1,9 @@
-﻿    using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
 public class TimeController : ITimeController
 {
+    private IGameStateController mGameStateController;
     public float SecondsCounter { get; private set; }
 
     private readonly UnityEvent SecondPassedEvent = new UnityEvent();
@@ -14,21 +15,44 @@ public class TimeController : ITimeController
         SingleManager.Register<ITimeController>(this);
     }
 
-    public void Init(){}
+    public void Init()
+    {
+        mGameStateController = SingleManager.Get<IGameStateController>();
+        mGameStateController.RegisterToGameStateChange(GameStateChange);
+    }
+
+    private void GameStateChange()
+    {
+        switch (mGameStateController.GameState)
+        {
+            case GameState.APP_INITED:
+                SecondsCounter = 0;
+                lastNotifyedSecond = 0;
+                break;
+            case GameState.PLAYING:
+                break;
+            case GameState.GAME_OVER:
+                break;
+            default:
+                break;
+        }
+    }
 
     public void StartGame()
     {
-        SecondsCounter = 0;
-        lastNotifyedSecond = 0;
+
     }
 
     public void Update()
     {
-        SecondsCounter += Time.deltaTime;
-        if (SecondsCounter > lastNotifyedSecond + 1)
+        if (mGameStateController.GameState == GameState.PLAYING)
         {
-            lastNotifyedSecond++;
-            SecondPassedEvent.Invoke();
+            SecondsCounter += Time.deltaTime;
+            if (SecondsCounter > lastNotifyedSecond + 1)
+            {
+                lastNotifyedSecond++;
+                SecondPassedEvent.Invoke();
+            }
         }
     }
 
@@ -44,6 +68,7 @@ public class TimeController : ITimeController
 
     public void Destroy()
     {
+        mGameStateController.RemoveFromGameStateChange(GameStateChange);
         SingleManager.Remove<ITimeController>();
     }
 }

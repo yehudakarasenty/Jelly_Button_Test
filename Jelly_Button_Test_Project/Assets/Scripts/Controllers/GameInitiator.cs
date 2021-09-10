@@ -19,11 +19,7 @@ public class GameInitiator : MonoBehaviour
         foreach (IController controller in controllers)
             controller.Init();
 
-        SingleManager.Get<IPlayerController>().StartGame();//TODO FIx:(
-        SingleManager.Get<IRoadController>().StartGame();//TODO FIx:(
-        SingleManager.Get<IObstaclesController>().StartGame();//TODO FIx:(
-        SingleManager.Get<ITimeController>().StartGame();//TODO FIx:(
-        SingleManager.Get<IScoreController>().StartGame();//TODO FIx:(
+        SingleManager.Get<IGameStateController>().AppInited();
     }
 
     private void ConfigControllers()
@@ -32,9 +28,10 @@ public class GameInitiator : MonoBehaviour
         controllers.Add(new RoadController());
         controllers.Add(new ObstaclesController());
         controllers.Add(new SmoothFollowContoller());
-        controllers.Add(new LabelsController());
+        controllers.Add(new UiController());
         controllers.Add(new TimeController());
         controllers.Add(new ScoreController());
+        controllers.Add(new GameStateController());
     }
 
     private void Update()
