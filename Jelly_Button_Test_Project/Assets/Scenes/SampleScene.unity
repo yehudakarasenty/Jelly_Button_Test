@@ -794,10 +794,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0880c2d1583b0a146985baad05098107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 6
+  currentDistance: 6
   height: 1
   heightDamping: 2
   rotationDamping: 3
+  distanceDamping: 5
   target: {fileID: 1360292556}
 --- !u!4 &967428530 stripped
 Transform:

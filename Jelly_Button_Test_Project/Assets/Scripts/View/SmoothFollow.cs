@@ -5,13 +5,16 @@ public class SmoothFollow : MonoBehaviour, ISmoothFollow
     private ISmoothFollowController mController;
 
     [SerializeField]
-    private float distance = 6f;
+    private float currentDistance = 6f;
     [SerializeField]
     private float height = 1f;
     [SerializeField]
     private float heightDamping = 2f;
     [SerializeField]
     private float rotationDamping = 3f;
+    [SerializeField]
+    private float distanceDamping = 3f;
+    private float wantedDistance = 6;
     [SerializeField]
     private Transform target;
 
@@ -48,7 +51,9 @@ public class SmoothFollow : MonoBehaviour, ISmoothFollow
         // Set the position of the camera on the x-z plane to:
         // distance meters behind the target
         var pos = transform.position;
-        pos = target.position - currentRotation * Vector3.forward * distance;
+        if(currentDistance!= wantedDistance)
+            currentDistance = Mathf.Lerp(currentDistance, wantedDistance, distanceDamping * Time.deltaTime);
+        pos = target.position - currentRotation * Vector3.forward * currentDistance;
         pos.y = currentHeight;
         transform.position = pos;
 
@@ -58,7 +63,7 @@ public class SmoothFollow : MonoBehaviour, ISmoothFollow
 
     public void SetDistance(float distance)
     {
-        this.distance = distance;
+        wantedDistance = distance;
     }
 
     public void SetHeight(float height)
