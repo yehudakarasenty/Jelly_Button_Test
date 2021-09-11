@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Responsibility: View of the player
+/// </summary>
 public interface IPlayerView
 {
     Quaternion Rotation { get; set; }

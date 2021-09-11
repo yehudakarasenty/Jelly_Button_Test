@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Responsibility: Move the player and listen to collosions
+/// </summary>
 public interface IPlayerController: IController
 {
     void SetView(IPlayerView playerView);
