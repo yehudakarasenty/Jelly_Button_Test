@@ -2,13 +2,22 @@
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Responsibility: Hold and manage the GameState
+/// </summary>
 public class GameStateController : IGameStateController
 {
+    #region Memebers
+    #region Dependencies
     private IPlayerController mPlayerController;
     private IInputListener mInputListener;
+    #endregion
+
     public GameState GameState { get; private set; }
     private UnityEvent gameStateChangedEvent = new UnityEvent();
+    #endregion
 
+    #region Functions
     public GameStateController()
     {
         SingleManager.Register<IGameStateController>(this);
@@ -48,16 +57,10 @@ public class GameStateController : IGameStateController
         gameStateChangedEvent.Invoke();
     }
 
-    public void RegisterToGameStateChange(UnityAction action)
-    {
-        gameStateChangedEvent.AddListener(action);
-    }
+    public void RegisterToGameStateChange(UnityAction action)=> gameStateChangedEvent.AddListener(action);
 
-    public void RemoveFromGameStateChange(UnityAction action)
-    {
-        gameStateChangedEvent.RemoveListener(action);
-    }
-
+    public void RemoveFromGameStateChange(UnityAction action)=> gameStateChangedEvent.RemoveListener(action);
+    
     public void Update()
     {
         if (GameState == GameState.READY_TO_PLAY && mInputListener.AnyKey)
@@ -68,4 +71,5 @@ public class GameStateController : IGameStateController
     {
         SingleManager.Remove<IGameStateController>();
     }
+    #endregion
 }

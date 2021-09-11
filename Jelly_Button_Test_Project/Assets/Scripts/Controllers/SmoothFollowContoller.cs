@@ -1,9 +1,17 @@
-﻿public class SmoothFollowContoller : ISmoothFollowController
+﻿/// <summary>
+/// Responsibility: Manage the camera movment class
+/// </summary>
+public class SmoothFollowContoller : ISmoothFollowController
 {
+    #region Members
+    #region Dependecies
     private IPlayerController mPlayerController;
+    #endregion
 
     private ISmoothFollow mView;
+    #endregion
 
+    #region Functions
     public SmoothFollowContoller()
     {
         SingleManager.Register<ISmoothFollowController>(this);
@@ -26,14 +34,12 @@
         mView.SetHeight(zoom ? 0.2f : 1);
     }
 
-    public void Update()
-    {
-        
-    }
+    public void Update(){}
 
     public void Destroy()
     {
         mPlayerController.RemoveFromOnBoostChange(SetZoom);
         SingleManager.Remove<ISmoothFollowController>();
     }
+    #endregion
 }

@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Responsibility: Manage user Input and notify
+/// </summary>
 public class InputListener : MonoBehaviour, IInputListener
 {
+    #region Members
     private FloatUnityEvent OnHorizontalChange = new FloatUnityEvent();
 
     public bool AnyKey { get => Input.anyKey; }
+    #endregion
 
+    #region Functions
     private void Awake()
     {
         SingleManager.Register<IInputListener>(this);
@@ -27,15 +33,9 @@ public class InputListener : MonoBehaviour, IInputListener
         }
     }
 
-    public void RegisterToHorizontalInput(UnityAction<float> action)
-    {
-        OnHorizontalChange.AddListener(action);
-    }
+    public void RegisterToHorizontalInput(UnityAction<float> action) => OnHorizontalChange.AddListener(action);
 
-    public void RemoveFromHorizontalInput(UnityAction<float> action)
-    {
-        OnHorizontalChange.RemoveListener(action);
-    }
+    public void RemoveFromHorizontalInput(UnityAction<float> action) => OnHorizontalChange.RemoveListener(action);
 
     public bool IsKeyIsDown(KeyCode keyCode) => Input.GetKey(keyCode);
 
@@ -43,6 +43,7 @@ public class InputListener : MonoBehaviour, IInputListener
     {
         SingleManager.Remove<IInputListener>();
     }
+    #endregion
 }
 
 public class FloatUnityEvent : UnityEvent<float> { }

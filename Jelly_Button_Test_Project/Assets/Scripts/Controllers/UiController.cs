@@ -1,13 +1,23 @@
 ﻿using System;
+using UnityEngine;
 
+/// <summary>
+/// Responsibility: Manage the UI screen (labels, buttons, etc)
+/// </summary>
 public class UiController : IUiController
 {
+    #region Members
+    #region Dependencies
     private ITimeController mTimeController;
     private IScoreController mScoreController;
     private IObstaclesController mObstaclesController;
     private IGameStateController mGameStateController;
-    private IUiView mView;
+    #endregion
 
+    private IUiView mView;
+    #endregion
+
+    #region Functions
     public UiController()
     {
         SingleManager.Register<IUiController>(this);
@@ -56,6 +66,7 @@ public class UiController : IUiController
                 mView.ShowHighestScoreCongratText = mScoreController.IsHighestScore;
                 break;
             default:
+                Debug.LogError("Not familyar with mGameStateController.GameState: " + mGameStateController.GameState);
                 break;
         }
     }
@@ -77,10 +88,7 @@ public class UiController : IUiController
 
     private void UpdateObstaclesAmount()=>  mView.ObstaclesText = "Asteroids: "+ mObstaclesController.PassedObstacleAmount;
 
-    public void PlayAgainButtonClicked()
-    {
-        mGameStateController.PlayAgain();
-    }
+    public void PlayAgainButtonClicked()=> mGameStateController.PlayAgain();
 
     public void Destroy()
     {
@@ -90,4 +98,5 @@ public class UiController : IUiController
         mObstaclesController.RemoveFromObstaclePassedNotifyer(UpdateObstaclesAmount);
         mGameStateController.RemoveFromGameStateChange(GameStateChange);
     }
+    #endregion
 }

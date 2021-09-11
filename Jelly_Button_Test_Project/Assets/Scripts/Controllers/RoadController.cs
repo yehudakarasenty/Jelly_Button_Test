@@ -1,10 +1,17 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Responsibility: Build the road
+/// </summary>
 public class RoadController : IRoadController
 {
+    #region Member
+    #region Const
+    //the length of the road which needed
     private const float ROAD_LENGTH = 200;
     private const float ROAD_WIDTH = 6;
+    #endregion
 
     #region Dependencies
     private IPlayerController mPlayerController;
@@ -23,7 +30,9 @@ public class RoadController : IRoadController
     public float RoadLength => ROAD_LENGTH;
 
     public float RoadWidth => ROAD_WIDTH;
+    #endregion
 
+    #region Functions
     public RoadController()
     {
         SingleManager.Register<IRoadController>(this);
@@ -35,7 +44,6 @@ public class RoadController : IRoadController
         lastCreatedPlane = new Vector3(0, mView.PlanePositionY, -mView.PlaneSize);
         BuildFirstRoad();
     }
-
 
     public void SetView(IRoadView view)
     {
@@ -71,4 +79,5 @@ public class RoadController : IRoadController
     {
         SingleManager.Remove<IRoadController>();
     }
+    #endregion
 }

@@ -1,16 +1,25 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Responsibility: Count the score of the player (current score and highest score)
+/// </summary>
 public class ScoreController : IScoreController
 {
+    #region Members
+    #region Const
     private const string HIGHEST_SCORE_KEY = "highest_score";
+    #endregion
+
+    #region Dependencies
     private IObstaclesController mObstaclesController;
     private ITimeController mTimeController;
     private IPlayerController mPlayerController;
     private IGameStateController mGameStateController;
+    #endregion
 
     private readonly UnityEvent scoreChangeEvent = new UnityEvent();
+
     private readonly UnityEvent highestScoreChangeEvent = new UnityEvent();
 
     public int CurrentScore { get; private set; }
@@ -20,7 +29,9 @@ public class ScoreController : IScoreController
     public bool IsHighestScore { get; private set; } = false;
 
     private bool boost = false;
+    #endregion
 
+    #region Functions
     public ScoreController()
     {
         SingleManager.Register<IScoreController>(this);
@@ -44,19 +55,9 @@ public class ScoreController : IScoreController
 
     private void GameStateChange()
     {
-        switch (mGameStateController.GameState)
-        {
-            case GameState.READY_TO_PLAY:
-                break;
-            case GameState.PLAYING:
-                break;
-            case GameState.GAME_OVER:
-                if (HighestScore > PlayerPrefs.GetInt(HIGHEST_SCORE_KEY, 0))
-                    PlayerPrefs.SetInt(HIGHEST_SCORE_KEY, HighestScore);
-                break;
-            default:
-                break;
-        }
+        if (mGameStateController.GameState == GameState.GAME_OVER)
+            if (HighestScore > PlayerPrefs.GetInt(HIGHEST_SCORE_KEY, 0))
+                PlayerPrefs.SetInt(HIGHEST_SCORE_KEY, HighestScore);
     }
 
     private void BoostChanged(bool boost) => this.boost = boost;
@@ -95,4 +96,5 @@ public class ScoreController : IScoreController
         mPlayerController.RemoveFromOnBoostChange(BoostChanged);
         mGameStateController.RemoveFromGameStateChange(GameStateChange);
     }
+    #endregion
 }

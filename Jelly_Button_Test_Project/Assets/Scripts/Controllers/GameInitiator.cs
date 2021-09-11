@@ -1,7 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Responsibility: To init the controllers and inject the needed life-cycle
+/// </summary>
 public class GameInitiator : MonoBehaviour
 {
     #region Members

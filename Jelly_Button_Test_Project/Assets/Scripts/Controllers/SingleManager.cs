@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Responsibility: Manage singletons classes
+/// </summary>
 public static class SingleManager
 {
+    #region Members
     private static Dictionary<Type, object> singletons = new Dictionary<Type, object>();
+    #endregion
 
+    #region Functions
     public static void Register<T>(T instance) where T : class
     {
         if (instance == null)
@@ -37,4 +43,5 @@ public static class SingleManager
         else
             return (T)singletons[typeof(T)];
     }
+    #endregion
 }
