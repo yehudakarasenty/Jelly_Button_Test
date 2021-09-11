@@ -1,23 +1,35 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Responsibility: Camera smooth follow target
+/// </summary>
 public class SmoothFollow : MonoBehaviour, ISmoothFollow
 {
+    #region Members
     private ISmoothFollowController mController;
 
     [SerializeField]
     private float currentDistance = 6f;
+
     [SerializeField]
     private float height = 1f;
+
     [SerializeField]
     private float heightDamping = 2f;
+
     [SerializeField]
     private float rotationDamping = 3f;
+
     [SerializeField]
     private float distanceDamping = 3f;
+
     private float wantedDistance = 6;
+
     [SerializeField]
     private Transform target;
+    #endregion
 
+    #region
     private void Awake()
     {
         mController = SingleManager.Get<ISmoothFollowController>();
@@ -61,13 +73,8 @@ public class SmoothFollow : MonoBehaviour, ISmoothFollow
         transform.LookAt(target);
     }
 
-    public void SetDistance(float distance)
-    {
-        wantedDistance = distance;
-    }
+    public void SetDistance(float distance)=> wantedDistance = distance;
 
-    public void SetHeight(float height)
-    {
-        this.height = height;
-    }
+    public void SetHeight(float height)=> this.height = height;
+    #endregion
 }

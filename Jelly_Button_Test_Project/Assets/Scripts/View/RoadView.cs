@@ -3,18 +3,22 @@ using UnityEngine;
 
 public class RoadView : MonoBehaviour, IRoadView
 {
+    #region Members
     private IRoadController mController;
 
     [SerializeField]
     private MeshRenderer planeInstance;
 
     private readonly Queue<MeshRenderer> pool = new Queue<MeshRenderer>();
+
     private readonly Queue<MeshRenderer> activePlanes = new Queue<MeshRenderer>();
 
     public float PlaneSize => planeInstance.GetComponent<MeshRenderer>().bounds.size.z;
 
     public float PlanePositionY => planeInstance.transform.position.y;
+    #endregion
 
+    #region Functions
     private void Awake()
     {
         mController = SingleManager.Get<IRoadController>();
@@ -39,4 +43,5 @@ public class RoadView : MonoBehaviour, IRoadView
         oldestPlane.gameObject.SetActive(false);
         pool.Enqueue(oldestPlane);
     }
+    #endregion
 }

@@ -3,16 +3,20 @@ using UnityEngine;
 
 public class ObstaclesView : MonoBehaviour, IObstaclesView
 {
-    IObstaclesController mController;
+    #region Members
+    private IObstaclesController mController;
 
     [SerializeField]
     private Transform ObstacleInstance;
 
     private Queue<Transform> pool = new Queue<Transform>();
+
     private Queue<Transform> activeObstacles = new Queue<Transform>();
 
     public float ObstaclePositionY => ObstacleInstance.position.y;
+    #endregion
 
+    #region Functions
     private void Awake()
     {
         mController = SingleManager.Get<IObstaclesController>();
@@ -37,4 +41,5 @@ public class ObstaclesView : MonoBehaviour, IObstaclesView
         oldestPlane.gameObject.SetActive(false);
         pool.Enqueue(oldestPlane);
     }
+    #endregion
 }
