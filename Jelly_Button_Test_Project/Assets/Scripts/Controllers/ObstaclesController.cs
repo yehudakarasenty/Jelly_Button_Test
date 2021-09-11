@@ -68,9 +68,9 @@ public class ObstaclesController : IObstaclesController
         float disToAdd = GetRandomNumberInRange(0, maxDistanceToAddRandom);
         float randomXPos;
         if (GetRandomNumberInRange(-1, 1) > 0)
-            randomXPos = GetRandomNumberInRange(-mRoadController.RoadWidth / 2, -mRoadController.RoadWidth / 6);
+            randomXPos = GetRandomNumberInRange(-mRoadController.RoadWidth / 2, -mRoadController.RoadWidth / 6); //left side
         else
-            randomXPos = GetRandomNumberInRange(mRoadController.RoadWidth / 6, mRoadController.RoadWidth / 2);
+            randomXPos = GetRandomNumberInRange(mRoadController.RoadWidth / 6, mRoadController.RoadWidth / 2);//right side
         Vector3 newPosition =  new Vector3(randomXPos, 0, lastCreatedObstaclePosition.z + minimumDistanceBetweenObstaclesZ + disToAdd);
         obstaclesPositions.Enqueue(newPosition);
         mView.AddObstacle(newPosition);
