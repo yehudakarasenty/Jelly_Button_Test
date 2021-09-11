@@ -108,6 +108,7 @@ public class PlayerController : IPlayerController
 
     public void Destroy()
     {
+        mInputListener.RemoveFromHorizontalInput(OnHorizontalInputChange);
         SingleManager.Remove<IPlayerController>();
     }
 }
