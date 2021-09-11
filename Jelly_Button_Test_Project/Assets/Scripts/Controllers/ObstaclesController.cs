@@ -7,7 +7,7 @@ public class ObstaclesController : IObstaclesController
 {
     private const float MAXIMUM_DISTANCE_BETWEEN_OBSTACLES_Z = 50;
     private const float MINIMUM_DISTANCE_BETWEEN_OBSTACLES_Z = 10;
-    private const float SECONDS_UNTIL_HIGHEST_DIFFICULTY = 120;
+    private const float SECONDS_UNTIL_HIGHEST_DIFFICULTY = 100;
     private const float MAXIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES = 20;
     private const float MINIMUM_DISTANCE_TO_ADD_TO_RANDOM_RESULTES = 10;
 
@@ -66,7 +66,11 @@ public class ObstaclesController : IObstaclesController
     private void CreateObstacle()
     {
         float disToAdd = GetRandomNumberInRange(0, maxDistanceToAddRandom);
-        float randomXPos = GetRandomNumberInRange(-mRoadController.RoadWidth / 2, mRoadController.RoadWidth/2);
+        float randomXPos;
+        if (GetRandomNumberInRange(-1, 1) > 0)
+            randomXPos = GetRandomNumberInRange(-mRoadController.RoadWidth / 2, -mRoadController.RoadWidth / 6);
+        else
+            randomXPos = GetRandomNumberInRange(mRoadController.RoadWidth / 6, mRoadController.RoadWidth / 2);
         Vector3 newPosition =  new Vector3(randomXPos, 0, lastCreatedObstaclePosition.z + minimumDistanceBetweenObstaclesZ + disToAdd);
         obstaclesPositions.Enqueue(newPosition);
         mView.AddObstacle(newPosition);
