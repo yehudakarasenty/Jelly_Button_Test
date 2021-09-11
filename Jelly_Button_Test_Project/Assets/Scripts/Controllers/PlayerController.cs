@@ -49,12 +49,15 @@ public class PlayerController : IPlayerController
     public void Update()
     {
         if (mGameStateController.GameState == GameState.PLAYING)
-        {
-            bool boost = mInputListener.IsKeyIsDown(KeyCode.Space);
-            if (this.boost != boost)
-                SetBoost(boost);
-            mView.Position += new Vector3(0, 0, speed * Time.deltaTime);
-        }
+            FlyForword();
+    }
+
+    private void FlyForword()
+    {
+        bool boost = mInputListener.IsKeyIsDown(KeyCode.Space);
+        if (this.boost != boost)
+            SetBoost(boost);
+        mView.Position += new Vector3(0, 0, speed * Time.deltaTime);
     }
 
     private void SetBoost(bool boost)
